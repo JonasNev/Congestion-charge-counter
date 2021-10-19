@@ -1,0 +1,21 @@
+﻿@model CounterModel
+
+<h2>Count the time-period charge</h2>
+
+@using (Html.BeginForm("Create", "Counter", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(c => c.CarTypes, "Car type")
+        @Html.DropDownListFor(m => m.SelectedCar, new SelectList(Model.CarTypes, "Name"), "", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(c => c.StartDate, "Entry date/time")
+        @Html.TextBoxFor(c => c.StartDate, new { @class = "form-control", @type = "datetime" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(c => c.EndDate, "End date/time")
+        @Html.TextBoxFor(c => c.EndDate, new { @class = "form-control", @type = "datetime" })
+    </div>
+    <button type="submit" class="btn btn-primary">Count</button>
+    @Html.ActionLink("Cancel", "Index", "Broker", null, new { @class = "btn btn-secondary" })
+}
