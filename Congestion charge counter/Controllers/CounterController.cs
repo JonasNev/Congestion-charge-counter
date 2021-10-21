@@ -15,7 +15,7 @@ namespace Congestion_charge_counter.Controllers
         DateTime startDate = new DateTime(2008, 04, 25, 10, 23, 00);
         DateTime EndDate = new DateTime(2008, 04, 28, 09, 02, 00);
         private double AMprice = 0.033;
-        private double PMpricePerMinute = 0.041;
+        private double PMpricePerMinute = 0.04166667;
         private double freeTime = 0;
         public CounterController(CounterService counterService)
         {
@@ -40,27 +40,27 @@ namespace Congestion_charge_counter.Controllers
         public IActionResult Create(CounterModel counter)
         {
             var StartDate = counter.StartDate;
-            DayOfWeek currentDay = StartDate.DayOfWeek;
-            while (counter.EndDate >= StartDate)
+            while (counter.EndDate > StartDate)
             {
                 if (StartDate.DayOfWeek == DayOfWeek.Saturday || StartDate.DayOfWeek == DayOfWeek.Sunday)
                 {
                     StartDate = StartDate.AddDays(1);
-                    break;
                 }
                 if (StartDate.TimeOfDay.Hours >= 0 && StartDate.TimeOfDay.TotalHours < 7)
                 {
                     StartDate = StartDate.AddHours(7);
                 }
-                if (StartDate.TimeOfDay.TotalHours >= 7 && StartDate.TimeOfDay.TotalHours < 12)
+                if (StartDate.TimeOfDay.Hours >= 7 && StartDate.TimeOfDay.Hours < 12)
                 {
                     StartDate = StartDate.AddMinutes(1);
                     counter.AM_rate += AMprice;
+                    counter.TotalAMTime = counter.TotalAMTime.AddMinutes(1);
                 }
                 if (StartDate.TimeOfDay.Hours >= 12 && StartDate.TimeOfDay.TotalHours < 19)
                 {
                     StartDate = StartDate.AddMinutes(1);
                     counter.PM_rate += PMpricePerMinute;
+                    counter.TotalPMTime = counter.TotalPMTime.AddMinutes(1);
                 }
                 if (StartDate.TimeOfDay.Hours >= 19 && StartDate.TimeOfDay.TotalHours < 24)
                 {
