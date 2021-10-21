@@ -14,7 +14,7 @@ namespace Congestion_charge_counter.Models
         public DateTime EndDate { get; set; }
         public double AM_rate { get; set; }
         public double PM_rate { get; set; }
-        public int TotalCharge { get; set; }
+        public double TotalCharge { get; set; }
         public DateTime TotalAMTime { get; set; }
         public DateTime TotalPMTime { get; set; }
     }

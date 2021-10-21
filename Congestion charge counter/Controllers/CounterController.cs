@@ -2,21 +2,15 @@
 using Congestion_charge_counter.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Congestion_charge_counter.Controllers
 {
     public class CounterController : Controller
     {
         private readonly CounterService _counterService;
-
+        // Hard coded values for easier testing (Using UI for imput is also viable)
         DateTime startDate = new DateTime(2008, 04, 25, 10, 23, 00);
         DateTime EndDate = new DateTime(2008, 04, 28, 09, 02, 00);
-        private double AMprice = 0.033;
-        private double PMpricePerMinute = 0.04166667;
-        private double freeTime = 0;
         public CounterController(CounterService counterService)
         {
             _counterService = counterService;
@@ -29,6 +23,7 @@ namespace Congestion_charge_counter.Controllers
 
         public IActionResult Create()
         {
+            //Passing a model with set values for easier testing
             var model = new CounterModel();
             model.StartDate = startDate;
             model.EndDate = EndDate;
@@ -39,36 +34,26 @@ namespace Congestion_charge_counter.Controllers
         [HttpPost]
         public IActionResult Create(CounterModel counter)
         {
-            var StartDate = counter.StartDate;
-            while (counter.EndDate > StartDate)
+            FeeModel fees = new();
+            switch (counter.SelectedCar)
             {
-                if (StartDate.DayOfWeek == DayOfWeek.Saturday || StartDate.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    StartDate = StartDate.AddDays(1);
-                }
-                if (StartDate.TimeOfDay.Hours >= 0 && StartDate.TimeOfDay.TotalHours < 7)
-                {
-                    StartDate = StartDate.AddHours(7);
-                }
-                if (StartDate.TimeOfDay.Hours >= 7 && StartDate.TimeOfDay.Hours < 12)
-                {
-                    StartDate = StartDate.AddMinutes(1);
-                    counter.AM_rate += AMprice;
-                    counter.TotalAMTime = counter.TotalAMTime.AddMinutes(1);
-                }
-                if (StartDate.TimeOfDay.Hours >= 12 && StartDate.TimeOfDay.TotalHours < 19)
-                {
-                    StartDate = StartDate.AddMinutes(1);
-                    counter.PM_rate += PMpricePerMinute;
-                    counter.TotalPMTime = counter.TotalPMTime.AddMinutes(1);
-                }
-                if (StartDate.TimeOfDay.Hours >= 19 && StartDate.TimeOfDay.TotalHours < 24)
-                {
-                    StartDate = StartDate.AddHours(5);
-                }
+                case "Motorbike":
+                    //Configure fees for seperate vehicle types by choise.
+                    //Fees calculated by dividing hourly rate / 60 (minutes)
+                    fees.AM_fee = 0.016666;
+                    fees.PM_fee = 0.016666;
+                    counter = _counterService.FeeCounter(counter, fees);
+                    break;
+                default:
+                    //Default is set for every other vehicle type, except motorbike, because its fees are different.
+                    fees.AM_fee = 0.033333;
+                    fees.PM_fee = 0.041666;
+                    counter = _counterService.FeeCounter(counter, fees);
+                    break;
             }
-            counter.PM_rate = Math.Round(counter.PM_rate, 1);
-            counter.AM_rate = Math.Round(counter.AM_rate, 1);
+            counter = _counterService.FeeRounding(counter);
+            //Getting the full sum for futher calculation if needed and also frontend
+            counter.TotalCharge = _counterService.TotalSum(counter.AM_rate, counter.PM_rate);
             return RedirectToAction("Index", counter);
         }
     }

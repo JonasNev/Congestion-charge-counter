@@ -12,10 +12,13 @@
     </thead>
     <tbody>
         <tr>
-            <td>Charge for AM rate @Model.AM_rate $</td>
+            <td>Charge for @Model.TotalAMTime.Hour h @Model.TotalAMTime.Minute m (AM rate): £@Model.AM_rate </td>
         </tr>
         <tr>
-            <td>Charge for PM rate @Model.PM_rate $</td>
+            <td>Charge for @Model.TotalPMTime.Hour h @Model.TotalPMTime.Minute m (AM rate): £@Model.PM_rate </td>
+        </tr>
+        <tr>
+            <td>Total Charge: £@Model.TotalCharge  </td>
         </tr>
     </tbody>
 </table>
