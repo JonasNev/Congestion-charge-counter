@@ -9,8 +9,8 @@ namespace Congestion_charge_counter.Controllers
     {
         private readonly CounterService _counterService;
         // Hard coded values for easier testing (Using UI for imput is also viable)
-        DateTime startDate = new DateTime(2008, 04, 25, 10, 23, 00);
-        DateTime EndDate = new DateTime(2008, 04, 28, 09, 02, 00);
+        readonly DateTime startDate = new DateTime(2008, 04, 25, 10, 23, 00);
+        readonly DateTime EndDate = new DateTime(2008, 04, 28, 09, 02, 00);
         public CounterController(CounterService counterService)
         {
             _counterService = counterService;
@@ -54,6 +54,8 @@ namespace Congestion_charge_counter.Controllers
             counter = _counterService.FeeRounding(counter);
             //Getting the full sum for futher calculation if needed and also frontend
             counter.TotalCharge = _counterService.TotalSum(counter.AM_rate, counter.PM_rate);
+            //Convert fees to string for display
+            counter = _counterService.FeesToString(counter);
             return RedirectToAction("Index", counter);
         }
     }

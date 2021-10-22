@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Congestion_charge_counter.Models
 {
@@ -14,8 +11,10 @@ namespace Congestion_charge_counter.Models
         public DateTime EndDate { get; set; }
         public double AM_rate { get; set; }
         public double PM_rate { get; set; }
-        public double TotalCharge { get; set; }
+        public string TotalCharge { get; set; }
         public DateTime TotalAMTime { get; set; }
         public DateTime TotalPMTime { get; set; }
+        public string AM_total { get; set; }
+        public string PM_total { get; set; }
     }
 }

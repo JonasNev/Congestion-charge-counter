@@ -1,9 +1,4 @@
 ﻿@model CounterModel
-
-<h2 class="d-inline-block mb-4">You need to pay:</h2>
-
-
-
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -12,10 +7,10 @@
     </thead>
     <tbody>
         <tr>
-            <td>Charge for @Model.TotalAMTime.Hour h @Model.TotalAMTime.Minute m (AM rate): £@Model.AM_rate </td>
+            <td>Charge for @Model.TotalAMTime.Hour h @Model.TotalAMTime.Minute m (AM rate): £@Model.AM_total </td>
         </tr>
         <tr>
-            <td>Charge for @Model.TotalPMTime.Hour h @Model.TotalPMTime.Minute m (AM rate): £@Model.PM_rate </td>
+            <td>Charge for @Model.TotalPMTime.Hour h @Model.TotalPMTime.Minute m (PM rate): £@Model.PM_total </td>
         </tr>
         <tr>
             <td>Total Charge: £@Model.TotalCharge  </td>

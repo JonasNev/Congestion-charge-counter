@@ -9,6 +9,7 @@ namespace Congestion_charge_counter.Services
         public CounterModel FeeCounter(CounterModel counter, FeeModel fees)
         {
             var StartDate = counter.StartDate;
+            //Logic for calculation between daily hours and weekdays
             while (counter.EndDate > StartDate)
             {
                 if (StartDate.DayOfWeek == DayOfWeek.Saturday || StartDate.DayOfWeek == DayOfWeek.Sunday)
@@ -46,11 +47,19 @@ namespace Congestion_charge_counter.Services
             return counter;
         }
 
-        public double TotalSum(double AMfee, double PMfee)
+        //Double calculation and conversion to string with a format "#.##"
+        public string TotalSum(double AMfee, double PMfee)
         {
             double fullSum = AMfee + PMfee;
-            fullSum = Math.Round(fullSum, 1, MidpointRounding.ToZero);
-            return fullSum;
+            string fullSumString = Math.Round(fullSum, 1, MidpointRounding.ToZero).ToString("F");
+            return fullSumString;
+        }
+        //Double conversion to string with a format "#.##"
+        public CounterModel FeesToString(CounterModel counter)
+        {
+            counter.AM_total = counter.AM_rate.ToString("F");
+            counter.PM_total = counter.PM_rate.ToString("F");
+            return counter;
         }
     }
 }
