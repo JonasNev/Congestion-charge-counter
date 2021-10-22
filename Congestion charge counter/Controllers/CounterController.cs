@@ -10,7 +10,7 @@ namespace Congestion_charge_counter.Controllers
         private readonly CounterService _counterService;
         // Hard coded values for easier testing (Using UI for imput is also viable)
         readonly DateTime startDate = new DateTime(2008, 04, 25, 10, 23, 00);
-        readonly DateTime EndDate = new DateTime(2008, 04, 28, 09, 02, 00);
+        readonly DateTime endDate = new DateTime(2008, 04, 28, 09, 02, 00);
         public CounterController(CounterService counterService)
         {
             _counterService = counterService;
@@ -26,7 +26,7 @@ namespace Congestion_charge_counter.Controllers
             //Passing a model with set values for easier testing
             var model = new CounterModel();
             model.StartDate = startDate;
-            model.EndDate = EndDate;
+            model.EndDate = endDate;
             model.SelectedCar = "Car";
             return View(model);
         }
